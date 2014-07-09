@@ -21,7 +21,7 @@ var Store = function(){
     if(!opts.name) return cb("A node have to have a name!");
     
     var _id = nextId++;
-    _id += ""; // make a string...
+    _id = depopulateChildNodes([_id])[0]; // make a string...
     opts.data = opts.data || {};
     
     // TODO: validate correct form of childNodes ([_id1, _id2...] not [{_id:_id1},{_id:_id2}])

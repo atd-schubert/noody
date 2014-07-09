@@ -27,7 +27,7 @@ datastore.createNode({
   // Now save the changes
   
     .save(function(err, node){
-    if(err) console.log(err);
+    if(err) return console.log("Error: ", err);
     
     console.log(""); console.log(""); console.log("");
     console.log("Our changed node:", node.stringify(null, 2));
@@ -44,9 +44,23 @@ datastore.createNode({
       node.appendChild(childNode._id) // you don't have to use ._id, but it will be saved this way...
         .appendChild(childNode)       // Take a look, it works...
         .save(function(err, node){
+          if(err) return console.log("Error: ", err);
           console.log(""); console.log(""); console.log("");
           
           console.log("Our two nodes: ", node.stringify(null, 2), childNode.stringify(null, 2));
+          
+          // Now let's populate as tree
+          
+          datastore.getTree(node, function(err, node){
+            if(err) return console.log("Error: ", err);
+            
+            console.log(""); console.log(""); console.log("");
+            
+            console.log("The populated node: ", node.stringify(null, 2));
+
+          });
+          
+          
         });
     });
   });

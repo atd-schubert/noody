@@ -1,5 +1,6 @@
 "use strict";
 
+var Populate = require("./populate");
 
 var Noody = function Noody(opts){
   opts = opts || {};
@@ -23,10 +24,11 @@ var Noody = function Noody(opts){
     new Node.create(data, cb);
   };
   
+  this.populate = Populate(this);
+  
 }
 
 Noody.Stores = {
   virtual: require("./stores/virtual")
 }
-
 module.exports = Noody;

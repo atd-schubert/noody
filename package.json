@@ -22,5 +22,8 @@
   "bugs": {
     "url": "https://github.com/atd-schubert/noody/issues"
   },
-  "homepage": "https://github.com/atd-schubert/noody"
+  "homepage": "https://github.com/atd-schubert/noody",
+  "dependencies": {
+    "async": "^0.9.0"
+  }
 }
