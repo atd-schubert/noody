@@ -51,7 +51,7 @@ datastore.createNode({
           
           // Now let's populate as tree
           
-          datastore.getTree(node, function(err, node){
+          datastore.populate(node, function(err, node){
             if(err) return console.log("Error: ", err);
             
             console.log(""); console.log(""); console.log("");
