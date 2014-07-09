@@ -16,6 +16,9 @@ module.exports = function(noody){
         var i;
         
         cache[_id] = node;
+        
+        
+        
         for(i=0; i<node.childNodes.length; i++){
           if(!cache[node.childNodes[i]]) queue.push(node.childNodes[i]);
         }
@@ -31,7 +34,7 @@ module.exports = function(noody){
       for (i=0; i<arr.length; i++) {
         if(typeof(arr[i]) !== "string") return cb("Not a well formed nodes!");
         
-        arr[i] = cache[arr[i]];
+        arr[i] = cache[arr[i]] || arr[i];
       }
     };
 

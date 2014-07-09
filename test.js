@@ -52,6 +52,7 @@ datastore.createNode({
           // Now let's populate as tree
           childNode.delete(function(err){
             if(err) return console.log("Error: ", err);
+            
             datastore.populate(node, function(err, node){
               if(err) return console.log("Error: ", err);
               

@@ -132,16 +132,27 @@ module.exports = function(store){
       });
     };
     
-    this.delete = function(cb){
+    this.delete = function(cb, opts){
       if(!_loaded) cb("The node isn't ready to work with, please wait untill callback!");
       _deleted = true;
-      store.deleteNode(_id, cb);
+      store.deleteNode(_id, cb, opts);
     };
     
     
         
     store.getNode(_id, function(err, nodeData){
       if(err) return cb(err);
+      if(!nodeData) {
+        _deleted = true;
+        nodeData = {
+          class: "",
+          id: "",
+          childNodes: [],
+          name: "deleted",
+          data: {}
+        };
+      }
+      
       self.class = nodeData.class;
       self.id = nodeData.id;
       self.childNodes = nodeData.childNodes;

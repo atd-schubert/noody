@@ -11,6 +11,8 @@ var Store = function(){
   var nextId = 0;
 
   this.getNode = function(_id, cb){
+    if(!localStore[_id]) return cb(null, false);
+  
     cb(null, JSON.parse(JSON.stringify(localStore[_id]))); // get a clone to prevent data changes!
   };
   this.getNodeById = function(id, cb){
@@ -58,7 +60,7 @@ var Store = function(){
     this.getNode(_id, cb);
     
   };
-  this.deleteNode = function(_id, opts, cb){
+  this.deleteNode = function(_id, cb, opts){ // Maybe opts.force to delete refferred nodes
     delete localStore[_id];
     cb(null, true);
   };
