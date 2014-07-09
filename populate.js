@@ -3,9 +3,7 @@
 var async = require("async");
 
 module.exports = function(noody){
-
   return function populate(node, cb){
-  
     var cache = {};
     cache[node._id] = node;
     
@@ -16,17 +14,12 @@ module.exports = function(noody){
         var i;
         
         cache[_id] = node;
-        
-        
-        
         for(i=0; i<node.childNodes.length; i++){
           if(!cache[node.childNodes[i]]) queue.push(node.childNodes[i]);
         }
         cb();
-        
       });
     };
-
     
     var populateChildNodes = function(arr, cb){
       var i;
@@ -37,11 +30,8 @@ module.exports = function(noody){
         arr[i] = cache[arr[i]] || arr[i];
       }
     };
-
     
-
     var queue = async.queue(getNode, 16);
-    
     queue.drain = function(){
       var hash;
       
@@ -49,11 +39,8 @@ module.exports = function(noody){
       for(hash in cache) {
         populateChildNodes(cache[hash].childNodes);
       }
-      
       cb(null, node);
     };
     queue.push(node.childNodes);
-    
-
   };
 };
