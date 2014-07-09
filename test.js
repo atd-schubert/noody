@@ -50,14 +50,17 @@ datastore.createNode({
           console.log("Our two nodes: ", node.stringify(null, 2), childNode.stringify(null, 2));
           
           // Now let's populate as tree
-          
-          datastore.populate(node, function(err, node){
+          childNode.delete(function(err){
             if(err) return console.log("Error: ", err);
+            datastore.populate(node, function(err, node){
+              if(err) return console.log("Error: ", err);
+              
+              console.log(""); console.log(""); console.log("");
+              
+              console.log("The populated node: ", node.stringify(null, 2));
+  
+            });
             
-            console.log(""); console.log(""); console.log("");
-            
-            console.log("The populated node: ", node.stringify(null, 2));
-
           });
           
           
