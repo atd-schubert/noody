@@ -1,0 +1,26 @@
+{
+  "name": "noody",
+  "version": "0.0.0",
+  "description": "This is a module to support nodes with child nodes, inspired by the document object model.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/atd-schubert/noody.git"
+  },
+  "keywords": [
+    "node-model",
+    "model",
+    "data-store",
+    "database",
+    "store"
+  ],
+  "author": "Arne Schubert <atd.schubert@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/atd-schubert/noody/issues"
+  },
+  "homepage": "https://github.com/atd-schubert/noody"
+}
