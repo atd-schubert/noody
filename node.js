@@ -100,6 +100,7 @@ module.exports = function(store){
       
       this.childNodes = depopulateChildNodes(this.childNodes);
       
+      
       var tmp = {};
       if(opts.setId) tmp.setId = this.id;
       if(opts.setName) tmp.setName = this.name;
@@ -107,13 +108,8 @@ module.exports = function(store){
       if(opts.setChildNodes) tmp.setChildNodes = this.childNodes;
       if(opts.setData) tmp.setData = this.data;
       
-      store.writeNode(_id, {
-        setId: this.id,
-        setName: this.name,
-        setClass: this.class,
-        setChildNodes: this.childNodes,
-        setData: this.data
-      }, function(err){
+      
+      store.writeNode(_id, tmp, function(err){
         if(err) return cb(err);
         transactions = { // reset...
           setId: false,
