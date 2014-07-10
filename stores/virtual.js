@@ -21,8 +21,8 @@ var Store = function(){
     cb(null, JSON.parse(JSON.stringify(ids[id]))); // get a clone to prevent data changes!
   };
   this.createNode = function(opts, cb){
-    if(localStore[nextId]) return cb("Can't create node. There is already a node with this name!");
-    if(!opts.name) return cb("A node have to have a name!");
+    if(localStore[nextId]) return cb(new Error("Can't create node. There is already a node with this name!"));
+    if(!opts.name) return cb(new Error("A node have to have a name!"));
     
     if(opts.id && ids[opts.id]) return cb(new Error("There is already a node with this id!"));
         
@@ -49,7 +49,7 @@ var Store = function(){
     this.getNode(_id, cb);
   };
   this.writeNode = function(_id, opts, cb){
-    if(!localStore[_id]) return cb("There is no node to change! Please create a node first before make changes on it...");
+    if(!localStore[_id]) return cb(new Error("There is no node to change! Please create a node first before make changes on it..."));
     var ls = localStore[_id];
     
     if(opts.setId) {

@@ -94,7 +94,7 @@ module.exports = function(store){
     
     
     this.save = function(cb, opts){
-      if(_deleted) return cb("Can't work with a deleted Node!");
+      if(_deleted) return cb(new Error("Can't work with a deleted Node!"));
       
       opts = opts || transactions;
       
