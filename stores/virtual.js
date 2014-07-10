@@ -16,6 +16,7 @@ var Store = function(){
     cb(null, JSON.parse(JSON.stringify(localStore[_id]))); // get a clone to prevent data changes!
   };
   this.getNodeById = function(id, cb){
+    if(!ids[id]) return cb(null, false);
     cb(null, JSON.parse(JSON.stringify(ids[id]))); // get a clone to prevent data changes!
   };
   this.createNode = function(opts, cb){
@@ -48,11 +49,21 @@ var Store = function(){
     if(!localStore[_id]) return cb("There is no node to change! Please create a node first before make changes on it...");
     var ls = localStore[_id];
     
+    if(opts.setId) {
+      if(ids[opts.setId] && ids[opts.setId]._id !== _id) return cb(new Error("There is already a node with this id!"));
+      if(ls.id) ids[ls.id] = undefined;
+      ids[opts.setId] = ls;
+      ls.id = opts.setId;
+    }
+    if(opts.setId === "") {
+      ids[ls.id] = undefined;
+      ls.id = undefined;
+    }
+    
     if(opts.setData) ls.data = opts.setData;
     if(opts.setName) ls.name = opts.setName.toLowerCase();
-    if(opts.setId) ls.id = ids[opts.SetId] = opts.SetId;
     if(opts.setClass) ls.class = opts.setClass;
-    
+
     if(opts.setChildNodes) ls.childNodes = depopulateChildNodes(opts.setChildNodes);
     if(opts.appendChildNode) ls.childNodes.push(depopulateChildNodes([opts.appendChildNode])[0]);
     if(opts.prependChildNode) ls.childNodes.unshift(depopulateChildNodes([opts.prependChildNode])[0]);
