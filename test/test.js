@@ -141,7 +141,6 @@ describe('Virtual-Store', function(){
   describe('stress tests', function(){
     describe("create 1000000 nodes", function(done){
       it("should create such a mass elements", function(done){
-        return done();
         var total = 1000000;
         var ready = 0;
         var i = 0;
@@ -151,7 +150,7 @@ describe('Virtual-Store', function(){
         };
         
         for(i=0; i<total; i++) {
-          datastore.createNode({data: {no:"data"}, class: "one-in-a-million", id:i}, function(err, node){
+          datastore.createNode({data: {no:"data"}, class: "one-in-a-million", id:"stress1-"+i, name:"stress"}, function(err, node){
             if(err) return done(err);
             if(!node.class === "one-in-a-million" || !node.data.no === "data" ) return done(new Error("Wrong data in stresstest"));
             else backcount();
@@ -161,7 +160,6 @@ describe('Virtual-Store', function(){
       
       
       it("should get all elements by id", function(done){
-        return done();
         var total = 1000000;
         var ready = 0;
         var i = 0;
@@ -171,7 +169,7 @@ describe('Virtual-Store', function(){
         };
         
         for(i=0; i<total; i++) {
-          datastore.getNodeById(i, function(err, node){
+          datastore.getNodeById("stress1-"+i, function(err, node){
             if(err) return done(err);
             if(!node.class === "one-in-a-million" || !node.data.no === "data" ) return done(new Error("Wrong data in stresstest"));
             else backcount();
