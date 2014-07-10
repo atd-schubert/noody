@@ -18,10 +18,13 @@ var Noody = function Noody(opts){
   });
   
   this.getNode = function(_id, cb){
-    new Node(_id, cb);
+    Node.getNode(_id, cb);
+  };
+  this.getNodeById = function(id, cb){
+    Node.getNodeById(id, cb);
   };
   this.createNode = function(data, cb){
-    new Node.create(data, cb);
+    Node.createNode(data, cb);
   };
   
   this.populate = Populate(this);
@@ -29,6 +32,7 @@ var Noody = function Noody(opts){
 }
 
 Noody.Stores = {
-  virtual: require("./stores/virtual")
+  virtual: require("./stores/virtual"),
+  mongoose: require("./stores/mongoose")
 }
 module.exports = Noody;

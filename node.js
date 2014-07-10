@@ -4,9 +4,11 @@ var depopulateChildNodes = require("./stores/utils").depopulateChildNodes;
 
 module.exports = function(store){
   
-  var Node = function Node(_id, cb){
-    var _deleted = false;
-    var _loaded = false;
+  var Node = function Node(nodeData){
+  
+    var _id = nodeData._id;
+    var _deleted = nodeData._deleted || false;
+    //var _loaded = false;
     var self = this;
     
     var transactions = {
@@ -37,7 +39,6 @@ module.exports = function(store){
     
     this.setId = function(value){
       if(_deleted) throw new Error("Can't work with a deleted Node!");
-      if(!_loaded) throw new Error("The node isn't ready to work with, please wait untill callback!");
       
       transactions.setId = true;
       this.id = value;
@@ -45,15 +46,13 @@ module.exports = function(store){
     };
     this.setName = function(value){
       if(_deleted) throw new Error("Can't work with a deleted Node!");
-      if(!_loaded) throw new Error("The node isn't ready to work with, please wait untill callback!");
       
       transactions.setName = true;
-      this.class = value;
+      this.name = value;
       return this;
     };
     this.setClass = function(value){
       if(_deleted) throw new Error("Can't work with a deleted Node!");
-      if(!_loaded) throw new Error("The node isn't ready to work with, please wait untill callback!");
       
       transactions.setClass = true;
       this.class = value;
@@ -61,7 +60,6 @@ module.exports = function(store){
     };
     this.setData = function(value){
       if(_deleted) throw new Error("Can't work with a deleted Node!");
-      if(!_loaded) throw new Error("The node isn't ready to work with, please wait untill callback!");
       
       transactions.setData = true;
       if(value) this.data = value; // It is also possible to activate data saving from the original object... 
@@ -71,7 +69,6 @@ module.exports = function(store){
     
     this.appendChild = function(_id){
       if(_deleted) throw new Error("Can't work with a deleted Node!");
-      if(!_loaded) throw new Error("The node isn't ready to work with, please wait untill callback!");
       
       transactions.setChildNodes = true;
       this.childNodes.push(depopulateChildNodes([_id])[0]);
@@ -79,7 +76,6 @@ module.exports = function(store){
     };
     this.prependChild = function(_id){
       if(_deleted) throw new Error("Can't work with a deleted Node!");
-      if(!_loaded) throw new Error("The node isn't ready to work with, please wait untill callback!");
       
       transactions.setChildNodes = true;
       this.childNodes.unshift(depopulateChildNodes([_id])[0]);
@@ -87,7 +83,6 @@ module.exports = function(store){
     };
     this.setChildNodes = function(arr){
       if(_deleted) throw new Error("Can't work with a deleted Node!");
-      if(!_loaded) throw new Error("The node isn't ready to work with, please wait untill callback!");
       
       transactions.setChildNodes = true;
       this.childNodes = depopulateChildNodes(arr);
@@ -100,7 +95,6 @@ module.exports = function(store){
     
     this.save = function(cb, opts){
       if(_deleted) return cb("Can't work with a deleted Node!");
-      if(!_loaded) return cb("The node isn't ready to work with, please wait untill callback!");
       
       opts = opts || transactions;
       
@@ -133,18 +127,35 @@ module.exports = function(store){
     };
     
     this.delete = function(cb, opts){
-      if(!_loaded) cb("The node isn't ready to work with, please wait untill callback!");
       _deleted = true;
       store.deleteNode(_id, cb, opts);
     };
     
     
-        
+    
+      
+      
+      self.class = nodeData.class;
+      self.id = nodeData.id;
+      self.childNodes = nodeData.childNodes;
+      self.name = nodeData.name;
+      self.data = nodeData.data;
+      
+    
+  };
+  Node.createNode = function createNode(opts, cb){
+    store.createNode(opts, function(err, data){
+      if(err) return cb(err);
+      cb(null, new Node(data));
+    });
+  };
+  
+  Node.getNode = function(_id, cb){
     store.getNode(_id, function(err, nodeData){
       if(err) return cb(err);
       if(!nodeData) {
-        _deleted = true;
         nodeData = {
+          _deleted: true,
           class: "",
           id: "",
           childNodes: [],
@@ -153,22 +164,26 @@ module.exports = function(store){
         };
       }
       
-      self.class = nodeData.class;
-      self.id = nodeData.id;
-      self.childNodes = nodeData.childNodes;
-      self.name = nodeData.name;
-      self.data = nodeData.data;
-      
-      _loaded = true;
-      cb(null, self);
+      cb(null, new Node(nodeData));
     });
-    
-  };
-  Node.create = function createNode(opts, cb){
-    store.createNode(opts, function(err, data){
+  }
+  Node.getNodeById = function(id, cb){
+    store.getNodeById(id, function(err, nodeData){
       if(err) return cb(err);
-      new Node(data._id, cb);
+      if(!nodeData) {
+        nodeData = {
+          _deleted: true,
+          class: "",
+          id: "",
+          childNodes: [],
+          name: "deleted",
+          data: {}
+        };
+      }
+      
+      cb(null, new Node(nodeData));
     });
-  };
+  }
+  
   return Node;
 };
