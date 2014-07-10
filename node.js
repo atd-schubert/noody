@@ -100,10 +100,14 @@ module.exports = function(store){
       
       this.childNodes = depopulateChildNodes(this.childNodes);
       
+      if(this.id) this.id = this.id.toString();
+      if(this.class) this.class = this.class.toString();
+      this.name = this.name.toString().toLowerCase();
+      
       
       var tmp = {};
-      if(opts.setId) tmp.setId = this.id.toString();
-      if(opts.setName) tmp.setName = this.name.toString().toLowerCase();
+      if(opts.setId) tmp.setId = this.id;
+      if(opts.setName) tmp.setName = this.name;
       if(opts.setClass) tmp.setClass = this.class;
       if(opts.setChildNodes) tmp.setChildNodes = this.childNodes;
       if(opts.setData) tmp.setData = this.data;
@@ -164,6 +168,7 @@ module.exports = function(store){
     });
   }
   Node.getNodeById = function(id, cb){
+    id = id.toString();
     store.getNodeById(id, function(err, nodeData){
       if(err) return cb(err);
       if(!nodeData) {

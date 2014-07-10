@@ -16,6 +16,7 @@ var Store = function(){
     cb(null, JSON.parse(JSON.stringify(localStore[_id]))); // get a clone to prevent data changes!
   };
   this.getNodeById = function(id, cb){
+    id = id.toString();
     if(!ids[id]) return cb(null, false);
     cb(null, JSON.parse(JSON.stringify(ids[id]))); // get a clone to prevent data changes!
   };
@@ -36,12 +37,12 @@ var Store = function(){
     var tmp = {
       data: opts.data,
       _id: _id,
-      name: opts.name,
+      name: opts.name.toString().toLowerCase(),
       childNodes: opts.childNodes
     };
     
-    if(opts.id) tmp.id = opts.id;
-    if(opts.class) tmp.class = opts.class;
+    if(opts.id) tmp.id = opts.id.toString();
+    if(opts.class) tmp.class = opts.class.toString();
     
     localStore[_id] = tmp;
     
