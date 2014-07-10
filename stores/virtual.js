@@ -23,6 +23,8 @@ var Store = function(){
     if(localStore[nextId]) return cb("Can't create node. There is already a node with this name!");
     if(!opts.name) return cb("A node have to have a name!");
     
+    if(opts.id && ids[opts.id]) return cb(new Error("There is already a node with this id!"));
+        
     var _id = nextId++;
     _id += ""; // make a string...
     opts.data = opts.data || {};
@@ -50,6 +52,7 @@ var Store = function(){
     var ls = localStore[_id];
     
     if(opts.setId) {
+      opts.setId = opts.setId.toString();
       if(ids[opts.setId] && ids[opts.setId]._id !== _id) return cb(new Error("There is already a node with this id!"));
       if(ls.id) ids[ls.id] = undefined;
       ids[opts.setId] = ls;

@@ -102,8 +102,8 @@ module.exports = function(store){
       
       
       var tmp = {};
-      if(opts.setId) tmp.setId = this.id;
-      if(opts.setName) tmp.setName = this.name;
+      if(opts.setId) tmp.setId = this.id.toString();
+      if(opts.setName) tmp.setName = this.name.toString().toLowerCase();
       if(opts.setClass) tmp.setClass = this.class;
       if(opts.setChildNodes) tmp.setChildNodes = this.childNodes;
       if(opts.setData) tmp.setData = this.data;
