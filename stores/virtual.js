@@ -5,7 +5,7 @@
 var depopulateChildNodes = require("./utils").depopulateChildNodes;
 
 var Store = function(){
-  console.warn("Waring: You use the virtual store to save data! This is not recommended! You should use database managed store...");
+  console.warn("Warning: You use the virtual store to save data! This is not recommended! You should use database managed store...");
   var localStore = {};
   var ids = {};
   var nextId = 0;
