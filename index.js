@@ -7,7 +7,9 @@ var Noody = function Noody(opts){
   
   var store = opts.store || new Noody.Stores.virtual();
   
-  var Node = require("./node")(store);
+  var schemas = {};
+  
+  var Node = require("./node")(store, schemas);
   
   
   this.__defineGetter__('store', function(){
@@ -25,6 +27,16 @@ var Noody = function Noody(opts){
   };
   this.createNode = function(data, cb){
     Node.createNode(data, cb);
+  };
+  
+  this.setSchema = function(name, json){
+    schemas[name] = json;
+  };
+  this.getSchema = function(name){
+    return schemas[name];
+  };
+  this.removeSchema = function(name){
+    schemas[name] = undefined;
   };
   
   this.populate = Populate(this);

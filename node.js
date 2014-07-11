@@ -1,8 +1,9 @@
 "use strict";
 
 var depopulateChildNodes = require("./stores/utils").depopulateChildNodes;
+var jsonSchema = require("json-schema");
 
-module.exports = function(store){
+module.exports = function(store, schemas){
   
   var Node = function Node(nodeData){
   
@@ -61,6 +62,11 @@ module.exports = function(store){
     this.setData = function(value){
       if(_deleted) throw new Error("Can't work with a deleted Node!");
       
+      if(schemas[this.name]) {
+        var test = jsonSchema.validate(value || this.data, schemas[this.name]);
+        if(!test.valid) throw new Error("Node data is invalid to JSON-Schema: "+JSON.stringify(test.errors));
+      }
+      
       transactions.setData = true;
       if(value) this.data = value; // It is also possible to activate data saving from the original object... 
       return this;
@@ -111,7 +117,14 @@ module.exports = function(store){
       if(opts.setName) tmp.setName = this.name;
       if(opts.setClass) tmp.setClass = this.class;
       if(opts.setChildNodes) tmp.setChildNodes = this.childNodes;
-      if(opts.setData) tmp.setData = this.data;
+      if(opts.setData) {
+        if(schemas[this.name]) {
+          var test = jsonSchema.validate(this.data, schemas[this.name]);
+          if(!test.valid) return cb(new Error("Node data is invalid to JSON-Schema: "+JSON.stringify(test.errors)));;
+        }
+        else tmp.setData = this.data;
+        
+      }
       
       
       store.writeNode(_id, tmp, function(err){
@@ -146,6 +159,11 @@ module.exports = function(store){
     
   };
   Node.createNode = function createNode(opts, cb){
+    if(!opts || !opts.name) return cb(new Error("A node have to have a name!"));
+    if(schemas[opts.name]) {
+      var test = jsonSchema.validate(opts.data, schemas[opts.name]);
+      if(!test.valid) return cb(new Error("Node data is invalid to JSON-Schema: "+JSON.stringify(test.errors)));
+    } 
     store.createNode(opts, function(err, data){
       if(err) return cb(err);
       cb(null, new Node(data));

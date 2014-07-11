@@ -137,8 +137,41 @@ describe('Virtual-Store', function(){
     });
   });
   
+  describe('JSON-Schema for data', function(){
+    // get schema here: http://www.jsonschema.net/
+    var schema = {"type":"object","$schema": "http://json-schema.org/draft-03/schema","id": "http://jsonschema.net","required":false,"properties":{ "arr": { "type":"array", "description": "An array with at least 1 but maximum 3 items, but it is nor required!", "minitems": "1", "maxitems": "3", "required":false}, "number": { "type":"number", "required":false }, "pattern": { "pattern":"^Hallo", "type":"string", "description": "A field witch validates with regex", "required":false }, "req": { "type":"string", "name": "required", "description": "A required field for test", "id": "http://jsonschema.net/req", "required":true } }};
+    var schemaNode;
+    
+    datastore.setSchema("schema", schema);
+    
+    it("schould create a node with valid data", function(done){
+      datastore.createNode({name:"schema", data:{pattern:"Hallo Word", req: "Here it is", number: 123, arr:[1,2]}}, function(err, node){
+        if(err) return done(err);
+        schemaNode = node;
+        if(node.data.req === "Here it is") done();
+        else done(new Error("Created node is not the right one..."));
+      });
+    });
+    it("schould not create a node with invalid data", function(done){
+      datastore.createNode({name:"schema", data:{pattern:"Hello Word", number: "is an Int", arr:[1,2,3,4]}}, function(err, node){
+        if(err) done();
+        else done(new Error("created a node with invalid data"));
+      });
+    });
+    it("schould not setdata to a node with invalid data", function(done){
+      try {
+        schemaNode.setData({});
+      } catch(e) { return done(); }
+      done(new Error("changed data"));
+    });
+    
+  });
+  
+  
+  
   
   describe('stress tests', function(){
+    return;
     describe("create 1000000 nodes", function(done){
       it("should create such a mass elements", function(done){
         var total = 1000000;
