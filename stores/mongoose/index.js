@@ -44,3 +44,6 @@ var Store = function MongooseStore(opts){
   this.deleteNode = function(_id, cb, opts){
     model.findByIdAndRemove(_id, opts, cb);
   };
+};
+
+module.exports = Store;

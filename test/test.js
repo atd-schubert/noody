@@ -243,7 +243,7 @@ describe('Mongoose-Store', function(){
     console.log("\n\nCan't run test with mongoose, because:");
     return console.log(e);
   }
-  var datastore = new Noody(Noody.Stores.mongoose({mongoose: mongoose}));
+  var datastore = new Noody({store: new Noody.Stores.mongoose({mongoose: mongoose})});
   var firstNode, nodeWithChild;
 
   describe('#createNode()', function(){
