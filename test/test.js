@@ -163,7 +163,7 @@ describe('Virtual-Store', function(){
     
     datastore.setSchema("schema", schema);
     
-    it("schould create a node with valid data", function(done){
+    it("should create a node with valid data", function(done){
       datastore.createNode({name:"schema", data:{pattern:"Hallo Word", req: "Here it is", number: 123, arr:[1,2]}}, function(err, node){
         if(err) return done(err);
         schemaNode = node;
@@ -171,13 +171,13 @@ describe('Virtual-Store', function(){
         else done(new Error("Created node is not the right one..."));
       });
     });
-    it("schould not create a node with invalid data", function(done){
+    it("should not create a node with invalid data", function(done){
       datastore.createNode({name:"schema", data:{pattern:"Hello Word", number: "is an Int", arr:[1,2,3,4]}}, function(err, node){
         if(err) done();
         else done(new Error("created a node with invalid data"));
       });
     });
-    it("schould not setdata to a node with invalid data", function(done){
+    it("should not setdata to a node with invalid data", function(done){
       try {
         schemaNode.setData({});
       } catch(e) { return done(); }
@@ -401,7 +401,7 @@ describe('Mongoose-Store', function(){
     
     datastore.setSchema("schema", schema);
     
-    it("schould create a node with valid data", function(done){
+    it("should create a node with valid data", function(done){
       datastore.createNode({name:"schema", data:{pattern:"Hallo Word", req: "Here it is", number: 123, arr:[1,2]}}, function(err, node){
         if(err) return done(err);
         schemaNode = node;
@@ -409,13 +409,13 @@ describe('Mongoose-Store', function(){
         else done(new Error("Created node is not the right one..."));
       });
     });
-    it("schould not create a node with invalid data", function(done){
+    it("should not create a node with invalid data", function(done){
       datastore.createNode({name:"schema", data:{pattern:"Hello Word", number: "is an Int", arr:[1,2,3,4]}}, function(err, node){
         if(err) done();
         else done(new Error("created a node with invalid data"));
       });
     });
-    it("schould not setdata to a node with invalid data", function(done){
+    it("should not setdata to a node with invalid data", function(done){
       try {
         schemaNode.setData({});
       } catch(e) { return done(); }
