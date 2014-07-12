@@ -4,7 +4,7 @@
 
 module.exports = function(opts){
   
-  mongoose = opts.mongoose;
+  var mongoose = opts.mongoose;
   var modelName = opts.modelName || "_noody";
   
   var schema = new mongoose.Schema({
