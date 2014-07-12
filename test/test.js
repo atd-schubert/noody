@@ -45,6 +45,25 @@ describe('Virtual-Store', function(){
       else done(new Error("The populated child havn't the right data"));
     });
   });
+  describe('#deleteNode()', function(){
+    var nodeToDelete;
+    
+    it('should delete a node', function(done){
+      datastore.createNode({name:"tmp"}, function(err, node){
+        nodeToDelete = node;
+        
+        node.delete(done);
+        
+      });
+    });
+    it('should find deleted node, but set it to name "deleted"', function(done){
+      datastore.getNode(nodeToDelete._id, function(err, node){
+        if(err) done(err);
+        if(node.name === "deleted") return done();
+        done(new Error("node isn't marked as deleted"));
+      });
+    });
+  });
   describe('change Node', function(){
     
     it('should not save untracked changed data', function(done){
