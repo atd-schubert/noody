@@ -21,11 +21,11 @@ module.exports = function(noody){
       });
     };
     
-    var populateChildNodes = function(arr, cb){
+    var populateChildNodes = function(arr){
       var i;
       
       for (i=0; i<arr.length; i++) {
-        if(typeof(arr[i]) !== "string") return cb("Not a well formed nodes!");
+        if(typeof(arr[i]) !== "string") return new Error("Not a well formed nodes! It is a "+typeof(arr[i])+" and have to be a string...");
         
         arr[i] = cache[arr[i]] || arr[i];
       }
@@ -37,7 +37,8 @@ module.exports = function(noody){
       
       // now link to child nodes...
       for(hash in cache) {
-        populateChildNodes(cache[hash].childNodes);
+        var err = populateChildNodes(cache[hash].childNodes);
+        if(err) return cb(err);
       }
       cb(null, node);
     };

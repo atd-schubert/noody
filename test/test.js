@@ -234,18 +234,31 @@ describe('Virtual-Store', function(){
 });
 
 
+
+
+
+
+
+
+
+
 describe('Mongoose-Store', function(){
 
   try {
     var mongoose = require("mongoose");
-    mongoose.connect('mongodb://localhost/_noody-test');
+    var dbName = 'mongodb://localhost/_noody-test-'+Date.now();
+    console.log("Try connecting to Mongoose on test database '"+dbName+"'");
+    mongoose.connect(dbName);
+    
   } catch (e){
     console.log("\n\nCan't run test with mongoose, because:");
     return console.log(e);
   }
+  
   var datastore = new Noody({store: new Noody.Stores.mongoose({mongoose: mongoose})});
   var firstNode, nodeWithChild;
-
+  
+  var model = mongoose.models._noody;
   describe('#createNode()', function(){
     it('should create a new element', function(done){
       datastore.createNode({name:"test", data:{message:"Some data..."}}, function(err, node){
@@ -255,12 +268,12 @@ describe('Mongoose-Store', function(){
     });
     it('should create a new element with the correct data', function(done){
       datastore.createNode({id: "full", name:"another", data:{message:"Some data..."}, class:"example", childNodes: [firstNode]}, function(err, node){
+        if(err) return done(err);
         nodeWithChild = node;
-        if(node.data.message === "Some data..." && node.id === "full" && node.class === "example" && node.name === "another" && node.childNodes[0]=== firstNode._id) done(err, node);
-        else done(new Error("Invalid data"));
+        if(node.data.message === "Some data..." && node.id === "full" && node.class === "example" && node.name === "another" && node.childNodes[0] === firstNode._id) return done(err, node);
+        done(new Error("Invalid data"));
       });
     });
-    
     it('should not create a node without name', function(done){
       datastore.createNode({data:{message:"Some data..."}, class:"example"}, function(err, node){
         if(err) done();
@@ -269,6 +282,7 @@ describe('Mongoose-Store', function(){
       });
     });
   });
+  
   describe('#getNode()', function(){
     it('should get our first node from test', function(done){
       datastore.getNode(firstNode._id, done);

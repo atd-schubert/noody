@@ -6,7 +6,6 @@ var jsonSchema = require("json-schema");
 module.exports = function(store, schemas){
   
   var Node = function Node(nodeData){
-  
     var _id = nodeData._id;
     var _deleted = nodeData._deleted || false;
     //var _loaded = false;
@@ -95,10 +94,6 @@ module.exports = function(store, schemas){
       return this;
     };
     
-    
-    
-    
-    
     this.save = function(cb, opts){
       cb = cb || function(){};
       if(_deleted) return cb(new Error("Can't work with a deleted Node!"));
@@ -146,27 +141,24 @@ module.exports = function(store, schemas){
       store.deleteNode(_id, cb, opts);
     };
     
-    
-    
-      
-      
-      self.class = nodeData.class;
-      self.id = nodeData.id;
-      self.childNodes = nodeData.childNodes;
-      self.name = nodeData.name;
-      self.data = nodeData.data;
-      
-    
+    this.class = nodeData.class;
+    this.id = nodeData.id;
+    this.childNodes = nodeData.childNodes;
+    this.name = nodeData.name;
+    this.data = nodeData.data;
   };
+  
   Node.createNode = function createNode(opts, cb){
     if(!opts || !opts.name) return cb(new Error("A node have to have a name!"));
     if(schemas[opts.name]) {
       var test = jsonSchema.validate(opts.data, schemas[opts.name]);
       if(!test.valid) return cb(new Error("Node data is invalid to JSON-Schema: "+JSON.stringify(test.errors)));
-    } 
+    }
     store.createNode(opts, function(err, data){
       if(err) return cb(err);
-      cb(null, new Node(data));
+      var node = new Node(data);
+      
+      cb(null, node);
     });
   };
   

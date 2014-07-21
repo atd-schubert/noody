@@ -3,17 +3,10 @@
 var Populate = require("./populate");
 
 var Noody = function Noody(opts){
-  
-  console.log("are there opts??? ", opts);
-
   opts = opts || {};
-  
-  console.log("is there a store??? ", !!opts.store);
-  
   var store = opts.store || new Noody.Stores.virtual();
   
   var schemas = {};
-  
   var Node = require("./node")(store, schemas);
   
   
