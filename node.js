@@ -197,6 +197,12 @@ module.exports = function(store, schemas){
       cb(null, new Node(nodeData));
     });
   }
+  Node.find = function(queryObj, cb){
+    store.findNode(queryObj, cb);
+  };
+  Node.findOne = function(queryObj, cb){
+    store.findOneNode(queryObj, cb);
+  };
   
   return Node;
 };

@@ -438,6 +438,25 @@ describe('Mongoose-Store', function(){
     
   });
   
+  describe('get nodes with .find()', function(){
+    it("should find last node with find", function(done){
+      datastore.findNode({}, function(err, nodes){
+        
+        done(nodes.length === 0 ? new Error("Havn't find any data") : null);
+      });
+    });
+    it("should find a special node", function(done){
+      datastore.findNode({data: { message: 'new data' }}, function(err, nodes){
+        done(nodes.length === 0 ? new Error("Havn't find the specified node") : null);
+      })
+    });
+    it("should find ONE special node", function(done){
+      datastore.findOneNode({data: { message: 'new data' }}, function(err, node){
+        done(node.id === "myNode" ? null : new Error("Havn't find the specified node"));
+      })
+    });
+  })
+  
   
   
   

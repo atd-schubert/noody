@@ -26,6 +26,12 @@ var Noody = function Noody(opts){
   this.createNode = function(data, cb){
     Node.createNode(data, cb);
   };
+  this.findNode = function(queryObj, cb){
+    Node.find(queryObj, cb);
+  };
+  this.findOneNode = function(queryObj, cb){
+    Node.findOne(queryObj, cb);
+  };
   
   this.setSchema = function(name, json){
     schemas[name] = json;
