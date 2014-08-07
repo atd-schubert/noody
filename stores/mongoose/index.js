@@ -79,14 +79,14 @@ var Store = function MongooseStore(opts){
   this.deleteNode = function(_id, cb, opts){
     model.findByIdAndRemove(_id, opts, cb);
   };
-  this.findNode = function(queryObj, cb) {
+  this.findNodes = function(queryObj, cb) {
     model.find(queryObj, function(err, nodes){
       if(err) return cb(err);
       var arr = [], i;
       for(i=0;i<nodes.length; i++) {
         arr.push(unmongoosify(nodes[i]));
       }
-      cb(null, arr); console.log(arr, nodes);
+      cb(null, arr);
     });
   };
   this.findOneNode = function(queryObj, cb) {

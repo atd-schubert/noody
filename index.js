@@ -26,7 +26,7 @@ var Noody = function Noody(opts){
   this.createNode = function(data, cb){
     Node.createNode(data, cb);
   };
-  this.findNode = function(queryObj, cb){
+  this.findNodes = function(queryObj, cb){
     Node.find(queryObj, cb);
   };
   this.findOneNode = function(queryObj, cb){

@@ -198,10 +198,40 @@ module.exports = function(store, schemas){
     });
   }
   Node.find = function(queryObj, cb){
-    store.findNode(queryObj, cb);
+    store.findNodes(queryObj, function(err, nodeDatas){
+      if(err) return cb(err);
+      var i;
+      for(i=0; i<nodeDatas.length; i++) {
+        if(!nodeDatas[i]) {
+          nodeDatas[i] = {
+            _deleted: true,
+            class: "",
+            id: "",
+            childNodes: [],
+            name: "deleted",
+            data: {}
+          }
+        }
+        nodeDatas[i] = new Node(nodeDatas[i]);
+      }
+      cb(null, nodeDatas)
+    });
   };
   Node.findOne = function(queryObj, cb){
-    store.findOneNode(queryObj, cb);
+    store.findOneNode(queryObj, function(err, nodeData){
+      if(err) return cb(err);
+      if(!nodeData) {
+        nodeData = {
+          _deleted: true,
+          class: "",
+          id: "",
+          childNodes: [],
+          name: "deleted",
+          data: {}
+        };
+      }
+      cb(null, new Node(nodeData));
+    });
   };
   
   return Node;
